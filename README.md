@@ -1,8 +1,9 @@
-#Netflix GPT
+# Netflix GPT
 
 - Create react app using vite
 - Configured Tailwind
-
+- Header
+- Login Form
 
 # Features
 - Login/Sign Up
@@ -14,7 +15,7 @@
         - Trailer in Background
         - Title and Description
         - Movie Suggestions
-            - MovieLists * n
+            - MovieList * n
 - NetflixGPT
     - Search Bar
     - Movie Suggestions
