@@ -3,7 +3,11 @@
 - Create react app using vite
 - Configured Tailwind
 - Header
+- Routing
 - Login Form
+- Sign Up Form
+- Form Validation
+- useRef hook
 
 # Features
 - Login/Sign Up
