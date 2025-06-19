@@ -4,13 +4,20 @@ import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../utils/userSilce";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [signInForm, setSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
 
@@ -35,6 +42,25 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://avatars.githubusercontent.com/u/135409867?v=4",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
+              navigate("/browse");
+            })
+            .catch((error) => {
+              setErrorMessage(error.message);
+            });
           // console.log(user);
         })
         .catch((error) => {
@@ -52,7 +78,17 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
+          const { uid, email, displayName, photoURL } = user;
+          dispatch(
+            addUser({
+              uid,
+              email,
+              displayName,
+              photoURL,
+            })
+          );
+
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -80,6 +116,7 @@ const Login = () => {
         </h1>
         {!signInForm && (
           <input
+            ref={name}
             type="text"
             placeholder="Full name"
             className="p-3 my-6 w-full border rounded-sm"
