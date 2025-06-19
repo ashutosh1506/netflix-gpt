@@ -1,6 +1,11 @@
 import { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [signInForm, setSignInForm] = useState(true);
@@ -15,9 +20,46 @@ const Login = () => {
   const handleButtonClick = () => {
     // validate the form data
     const message = checkValidData(email.current.value, password.current.value);
-    setErrorMessage(message)
-    
+    setErrorMessage(message);
+
+    if (message) return;
+
     // SignIn / SignUp
+    if (!signInForm) {
+      // SignUp Logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          // console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " - " + errorMessage);
+        });
+    } else {
+      // SignIn Logic
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage("Invalid Credentials");
+        });
+    }
   };
 
   return (
@@ -55,7 +97,9 @@ const Login = () => {
           placeholder="Password"
           className="p-3 my-6 w-full border rounded-sm"
         />
-        <p className="text-red-600 font-semibold text-lg py-2">{errorMessage}</p>
+        <p className="text-red-600 font-semibold text-lg py-2">
+          {errorMessage}
+        </p>
         <button
           className=" p-2 my-6 bg-red-600 w-full cursor-pointer hover:bg-red-700 border-0 rounded-sm "
           onClick={handleButtonClick}
