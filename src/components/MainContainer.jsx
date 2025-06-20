@@ -3,19 +3,19 @@ import VideoBackground from "./VideoBackground";
 import VideoTitle from "./VideoTitle";
 
 const MainContainer = () => {
-    const movies = useSelector((store) => store.movies?.nowPlayingMovies);
-    if(!movies) return;
+  const movies = useSelector((store) => store.movies?.nowPlayingMovies);
+  if (!movies) return;
 
-    const mainMovie = movies[0];
-    // console.log(mainMovie?.id);
-    
-    const {original_title, overview, id} = mainMovie;
-    
+  const mainMovie = movies[0];
+
+  const { original_title, overview, id } = mainMovie;
+
   return (
-    <div>
+    <div className="relative m-0 p-0">
+      <VideoBackground movieId={id} />
+      <div className="relative z-20">
         <VideoTitle title={original_title} overview={overview} />
-        <VideoBackground movieId = {id}/>
-        
+      </div>
     </div>
   );
 };

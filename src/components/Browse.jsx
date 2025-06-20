@@ -7,17 +7,12 @@ const Browse = () => {
   useNowPlayingMovies();
 
   return (
-    <div>
-      <Header />
+    <div className="relative min-h-screen overflow-x-hidden">
       <MainContainer />
-      <SecondaryContainer />
-      {/* # Main Container
-            - Video Background
-            - Video Title
-          # Secondary Container
-            - MovieList * n
-              - Cards * n
-      */}
+      <Header />
+      <div className="relative z-20 pt-[100vh]">
+        <SecondaryContainer />
+      </div>
     </div>
   );
 };
