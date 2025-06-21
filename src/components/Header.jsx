@@ -62,7 +62,7 @@ const Header = () => {
   return (
     <header
       className={`absolute w-full top-0 left-0 z-50 transition-all duration-500 ${
-        isScrolled ? "bg-black bg-opacity-95" : "bg-transparent"
+        isScrolled ? "bg-black/95" : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between px-4 md:px-8 py-2">
@@ -202,12 +202,14 @@ const Header = () => {
               </div>
 
               {/* Dropdown Menu */}
-              <div className="absolute right-0 mt-2 w-48 bg-black bg-opacity-90 rounded shadow-xl border border-gray-700 invisible group-hover:visible transition-all duration-300">
+              <div className="absolute right-0 mt-2 w-48 bg-black/90 rounded shadow-xl border border-gray-700 invisible group-hover:visible transition-all duration-300">
                 <div className="py-2 px-4 text-white text-sm">
-                  <p className="mb-1">{user.displayName || user.email}</p>
+                  <p className="mb-1">
+                    {user.displayName || user.email}
+                  </p>
                   <button
                     onClick={handleSignOut}
-                    className="text-red-600 hover:underline font-medium mt-2"
+                    className="text-red-600 hover:underline font-medium mt-2 cursor-pointer"
                   >
                     Sign Out
                   </button>
@@ -220,7 +222,7 @@ const Header = () => {
 
       {/* Mobile Navigation Menu - Shown when menu button is clicked */}
       {showMenu && (
-        <nav className="md:hidden bg-black bg-opacity-90 border-t border-gray-800">
+        <nav className="md:hidden bg-black/90 border-t border-gray-800">
           <ul className="py-3 px-4">
             <li className="py-2">
               <a href="#" className="text-white text-sm font-medium">
