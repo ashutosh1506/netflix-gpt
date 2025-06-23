@@ -4,10 +4,14 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { addUser, removeUser } from "../utils/userSilce";
-import { LOGO } from "../utils/contants";
+import { LOGO, SUPPORTED_LANGUAGES } from "../utils/contants";
+import { toggleGptSearchView } from "../utils/gptSlice";
+import { changeLanguage } from "../utils/configSlice";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
   const user = useSelector((store) => store.user);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -21,7 +25,12 @@ const Header = () => {
         navigate("/error");
       });
   };
-
+  const handleGptSearch = () => {
+    dispatch(toggleGptSearchView());
+  };
+  const handleLanguageChange = (e) => {
+    dispatch(changeLanguage(e.target.value));
+  };
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -35,7 +44,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -138,9 +146,25 @@ const Header = () => {
         {/* Right side - User controls */}
         {user && (
           <div className="flex items-center space-x-4">
+            {/* Lang icon */}
+            {showGptSearch && (
+              <select
+                className="pr-0 pl-2 text-white focus-within:bg-black"
+                onChange={handleLanguageChange}
+              >
+                {SUPPORTED_LANGUAGES.map((lang) => (
+                  <option value={lang.identifier} key={lang.identifier}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+            )}
             {/* Search Icon */}
-            <button className="text-white hover:text-gray-300">
-              <svg
+            <button
+              className="text-white hover:text-gray-300 cursor-pointer"
+              onClick={handleGptSearch}
+            >
+              {!showGptSearch ? <svg
                 className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
@@ -153,11 +177,11 @@ const Header = () => {
                   strokeWidth={2}
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
-              </svg>
+              </svg> : "Back"}
             </button>
 
             {/* Notification Bell */}
-            <button className="hidden sm:block text-white hover:text-gray-300">
+            <button className="hidden sm:block text-white hover:text-gray-300 cursor-pointer">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -204,9 +228,7 @@ const Header = () => {
               {/* Dropdown Menu */}
               <div className="absolute right-0 mt-2 w-48 bg-black/90 rounded shadow-xl border border-gray-700 invisible group-hover:visible transition-all duration-300">
                 <div className="py-2 px-4 text-white text-sm">
-                  <p className="mb-1">
-                    {user.displayName || user.email}
-                  </p>
+                  <p className="mb-1">{user.displayName || user.email}</p>
                   <button
                     onClick={handleSignOut}
                     className="text-red-600 hover:underline font-medium mt-2 cursor-pointer"
