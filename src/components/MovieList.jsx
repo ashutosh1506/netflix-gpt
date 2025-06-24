@@ -1,12 +1,14 @@
 import MovieCard from "./MovieCard";
 
 const MovieList = ({ title, movies }) => {
-
   return (
-    <div className="px-6 ">
-      <h1 className="text-2xl font-semibold py-4 text-white">{title}</h1>
-      <div className="flex overflow-x-scroll custom-scrollbar scroll-smooth snap-x">
-        <div className="flex">
+    <div className="px-6">
+      <h1 className="text-2xl font-semibold py-4 px-4 text-white">{title}</h1>
+
+      {/* Outer horizontal scroll container */}
+      <div className="flex overflow-x-auto overflow-y-hidden custom-scrollbar scroll-smooth snap-x">
+        {/* Inner flex container */}
+        <div className="flex space-x-4">
           {movies?.map((movie) => (
             <MovieCard key={movie.id} posterPath={movie.poster_path} />
           ))}

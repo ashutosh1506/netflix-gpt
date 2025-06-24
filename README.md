@@ -38,6 +38,8 @@
 - GPT Search Page
 - GPT Search Bar
 - Multi-language feature
+- GPT Search Functionality
+- Memoization
 
 # Features
 
