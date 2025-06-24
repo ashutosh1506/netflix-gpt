@@ -1,8 +1,8 @@
 const VideoTitle = ({ title, overview }) => {
   return (
-    <div className="w-screen -mt-30 pt-[40%] md:pt-[25%] px-6 md:px-12 absolute text-white top-0 left-0">
-      <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">{title}</h1>
-      <p className="py-4 md:py-6 text-sm md:text-lg w-full md:w-2/3 lg:w-1/2 xl:w-1/3 line-clamp-3 md:line-clamp-none">
+    <div className="w-screen -mt-25 md:-mt-35 pt-[70%] md:pt-[25%] px-6 md:px-12 absolute text-white top-0 left-0">
+      <h1 className="pt-20 text-xl md:text-5xl lg:text-6xl font-bold">{title}</h1>
+      <p className=" py-4 md:py-6 text-sm md:text-lg w-full md:w-2/3 lg:w-1/2 xl:w-1/3 line-clamp-3 md:line-clamp-none">
         {overview}
       </p>
 

@@ -69,7 +69,7 @@ const Header = () => {
   }, []);
   return (
     <header
-      className={`absolute w-full top-0 left-0 z-50 transition-all duration-500 ${
+      className={`fixed w-full top-0 left-0 z-50 bg-gradient-to-b from-black transition-all duration-500 ${
         isScrolled ? "bg-black/95" : "bg-transparent"
       }`}
     >
