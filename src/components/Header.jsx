@@ -83,7 +83,7 @@ const Header = () => {
           />
 
           {/* Navigation Menu - Hidden on mobile */}
-          <nav className="hidden md:block">
+          {user && (<nav className="hidden md:block">
             <ul className="flex space-x-4 lg:space-x-6">
               <li>
                 <a
@@ -119,10 +119,10 @@ const Header = () => {
                 </a>
               </li>
             </ul>
-          </nav>
+          </nav>)}
 
           {/* Mobile menu button */}
-          <button
+          {user && (<button
             className="md:hidden ml-2 text-white"
             onClick={() => setShowMenu(!showMenu)}
           >
@@ -140,7 +140,7 @@ const Header = () => {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-          </button>
+          </button>)}
         </div>
 
         {/* Right side - User controls */}
