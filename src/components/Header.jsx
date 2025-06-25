@@ -15,6 +15,7 @@ const Header = () => {
   const user = useSelector((store) => store.user);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleSignOut = () => {
     signOut(auth)
@@ -67,6 +68,20 @@ const Header = () => {
     // Unsubsribe when component unmounts
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showDropdown && !event.target.closest(".profile-dropdown")) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showDropdown]);
+
   return (
     <header
       className={`fixed w-full top-0 left-0 z-50 bg-gradient-to-b from-black transition-all duration-500 ${
@@ -83,64 +98,83 @@ const Header = () => {
           />
 
           {/* Navigation Menu - Hidden on mobile */}
-          {user && (<nav className="hidden md:block">
-            <ul className="flex space-x-4 lg:space-x-6">
-              <li>
-                <a
-                  href="#"
-                  className="text-white text-sm font-medium hover:text-gray-300"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 text-sm hover:text-white">
-                  TV Shows
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 text-sm hover:text-white">
-                  Movies
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 text-sm hover:text-white">
-                  New & Popular
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 text-sm hover:text-white">
-                  My List
-                </a>
-              </li>
-              <li className="hidden lg:block">
-                <a href="#" className="text-gray-300 text-sm hover:text-white">
-                  Browse by Languages
-                </a>
-              </li>
-            </ul>
-          </nav>)}
+          {user && (
+            <nav className="hidden md:block">
+              <ul className="flex space-x-4 lg:space-x-6">
+                <li>
+                  <a
+                    href="#"
+                    className="text-white text-sm font-medium hover:text-gray-300"
+                  >
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-300 text-sm hover:text-white"
+                  >
+                    TV Shows
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-300 text-sm hover:text-white"
+                  >
+                    Movies
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-300 text-sm hover:text-white"
+                  >
+                    New & Popular
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-gray-300 text-sm hover:text-white"
+                  >
+                    My List
+                  </a>
+                </li>
+                <li className="hidden lg:block">
+                  <a
+                    href="#"
+                    className="text-gray-300 text-sm hover:text-white"
+                  >
+                    Browse by Languages
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          )}
 
           {/* Mobile menu button */}
-          {user && (<button
-            className="md:hidden ml-2 text-white"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {user && (
+            <button
+              className="md:hidden ml-2 text-white"
+              onClick={() => setShowMenu(!showMenu)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>)}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Right side - User controls */}
@@ -164,22 +198,25 @@ const Header = () => {
               className="text-white hover:text-gray-300 cursor-pointer"
               onClick={handleGptSearch}
             >
-              {!showGptSearch ? <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg> : "Back"}
+              {!showGptSearch ? (
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              ) : (
+                "Back"
+              )}
             </button>
-
             {/* Notification Bell */}
             <button className="hidden sm:block text-white hover:text-gray-300 cursor-pointer">
               <svg
@@ -196,11 +233,16 @@ const Header = () => {
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                 />
               </svg>
-            </button>
-
+            </button>{" "}
             {/* User Profile */}
-            <div className="relative group">
-              <div className="flex items-center cursor-pointer">
+            <div className="relative profile-dropdown">
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowDropdown(!showDropdown);
+                }}
+              >
                 <img
                   className="w-8 h-8 rounded-md"
                   src={
@@ -223,20 +265,24 @@ const Header = () => {
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-              </div>
-
+              </div>{" "}
               {/* Dropdown Menu */}
-              <div className="absolute right-0 mt-2 w-48 bg-black/90 rounded shadow-xl border border-gray-700 invisible group-hover:visible transition-all duration-300">
-                <div className="py-2 px-4 text-white text-sm">
-                  <p className="mb-1">{user.displayName || user.email}</p>
-                  <button
-                    onClick={handleSignOut}
-                    className="text-red-600 hover:underline font-medium mt-2 cursor-pointer"
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-black/90 rounded shadow-xl border border-gray-700 z-50">
+                  <div
+                    className="py-2 px-4 text-white text-sm profile-dropdown-content"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    Sign Out
-                  </button>
+                    <p className="mb-1">{user.displayName || user.email}</p>
+                    <button
+                      onClick={handleSignOut}
+                      className="text-red-600 hover:underline font-medium mt-2 cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         )}

@@ -3,7 +3,7 @@ import lang from "../utils/languageConstants";
 import openai from "../utils/openai";
 import { useDispatch, useSelector } from "react-redux";
 import { API_OPTIONS } from "../utils/contants";
-import { addGptMovieResult } from "../utils/gptSlice";
+import { addGptMovieResult, setGptLoading } from "../utils/gptSlice";
 // import OpenAI from "openai";
 const GptSeachBar = () => {
   const searchText = useRef(null);
@@ -23,7 +23,6 @@ const GptSeachBar = () => {
     const json = await data.json();
     return json.results;
   };
-
   const handleGptSearchClick = async () => {
     const now = Date.now();
     if (loading || now - lastCalled < cooldownTime) {
@@ -33,6 +32,7 @@ const GptSeachBar = () => {
 
     setLastCalled(now);
     setLoading(true);
+    dispatch(setGptLoading(true));
 
     const gptQuery =
       "Act as a Movie recommendation system and suggest some movies for the query: " +
@@ -60,6 +60,7 @@ const GptSeachBar = () => {
       } else {
         alert("Something went wrong.");
       }
+      dispatch(setGptLoading(false));
     } finally {
       setLoading(false);
     }
@@ -67,13 +68,13 @@ const GptSeachBar = () => {
   return (
     <div className="pt-[40%] md:pt-[10%] flex justify-center ">
       <form
-        className="w-full md:w-1/2 bg-black grid grid-cols-12 "
+        className="w-full md:w-1/2 bg-black border  shadow-[0_0_10px_2px_rgba(239,68,68,0.7)] grid grid-cols-12"
         onSubmit={(e) => e.preventDefault()}
       >
         <input
           ref={searchText}
           type="text"
-          className="p-2 w-85 text-sm md:p-4 m-4 md:w-auto md:text-lg col-span-9 rounded-lg bg-white"
+          className="p-2 w-11/12 text-sm md:p-4 m-4 md:w-auto md:text-lg col-span-9 rounded-lg bg-white"
           placeholder={lang[langKey].gptSearchPlaceHolder}
         />
         <button
